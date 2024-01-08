@@ -38,4 +38,12 @@ else if (command === "-l") {
 	}
 	// console the thing
 	console.log(lines);
+} else if (command === "-w") {
+	// Replace website names with a placeholder word
+	let fileContents = fileContent.replace(/(https?:\/\/[^\s]+)/g, "WEBSITE");
+
+	// Split file for words
+	let words = fileContents.match(/[\w']+/g);
+	const wordCount = words.filter((word) => word !== "");
+	console.log(words);
 }
