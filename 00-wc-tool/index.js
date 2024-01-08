@@ -23,7 +23,7 @@ if (command === "-c") {
 	// create a function that count byteLength of the file
 	const byteLength = Buffer.byteLength(fileContent);
 
-	// console the thing
+	// console bytes length
 	console.log(byteLength);
 }
 // create a function for commanw -l
@@ -36,14 +36,15 @@ else if (command === "-l") {
 	} else {
 		lines = lines.length;
 	}
-	// console the thing
+	// console lines
 	console.log(lines);
 } else if (command === "-w") {
-	// Replace website names with a placeholder word
-	let fileContents = fileContent.replace(/(https?:\/\/[^\s]+)/g, "WEBSITE");
+	// create words array
+	let words = fileContent.split(/\s+/);
 
-	// Split file for words
-	let words = fileContents.match(/[\w']+/g);
-	const wordCount = words.filter((word) => word !== "");
-	console.log(words);
+	// filter empty stringss
+	const filteredWords = words.filter((word) => word !== "");
+
+	// console words
+	console.log(filteredWords);
 }
