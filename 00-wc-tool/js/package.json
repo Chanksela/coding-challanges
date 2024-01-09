@@ -1,0 +1,20 @@
+{
+	"type": "module",
+	"name": "js",
+	"version": "1.0.0",
+	"description": "CC00-WC tool",
+	"main": "index.js",
+	"scripts": {
+		"test": "testing if this works"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Chanksela/coding-challanges.git#main"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Chanksela/coding-challanges/issues"
+	},
+	"homepage": "https://github.com/Chanksela/coding-challanges/tree/main#readme"
+}

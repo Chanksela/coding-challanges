@@ -1,4 +1,5 @@
-const fs = require("fs");
+// const fs = require("fs");
+import fs from "fs";
 const commands = ["-c", "-w", "-l", "-m"];
 console.log(process.argv[2]);
 // read and assign the command name
