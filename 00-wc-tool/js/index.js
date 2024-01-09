@@ -1,5 +1,5 @@
 const fs = require("fs");
-const commands = ["-c", "-w", "-l"];
+const commands = ["-c", "-w", "-l", "-m"];
 console.log(process.argv[2]);
 // read and assign the command name
 const command = process.argv[2];
@@ -13,7 +13,8 @@ Second argument must be a command option!\x1b[0m
 Aviable commands: 
 -c - count bytes, 
 -l - outputs number of lines,
--w - outputs number of words`
+-w - outputs number of words
+-m - outputs number of characters`
 	);
 	process.exit();
 }
@@ -46,5 +47,15 @@ else if (command === "-l") {
 	const filteredWords = words.filter((word) => word !== "");
 
 	// console words
-	console.log(filteredWords);
+	console.log(filteredWords.length);
+} else if (command === "-m") {
+	// create characters array
+	let characters = fileContent.split("");
+
+	// filter out empty characters
+	const filteredWords = characters.filter(
+		(character) => character !== "" || character !== " "
+	);
+
+	console.log(filteredWords.length);
 }
