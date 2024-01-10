@@ -1,28 +1,33 @@
 import fs from "fs";
-// commands array
+// Create arrays for commands and process arguments
 const commands = ["-c", "-l", "-w", "-m"];
-// create process arguments array
 let processArguments = process.argv;
-// remove first two arguments from processArguments, it is not needeed
-processArguments.splice(0, 2);
-// create filenam variable
+
+// create variable for file name and command
 let fileName;
-// create command variable
 let command;
-// check if command exists in processArguments
-processArguments.filter((argument) => {
-	if (commands.includes(argument)) {
-		command = argument;
-	}
-	if (!argument.includes("-") && argument.includes(".txt")) {
-		fileName = argument;
-	}
-	return;
-});
+
+function defineVariablesFromArguments(argument) {
+	// remove first two arguments from processArguments, it is not needeed
+	processArguments.splice(0, 2);
+
+	// check if command exists in processArguments
+	processArguments.filter((argument) => {
+		if (commands.includes(argument)) {
+			command = argument;
+		}
+		if (!argument.includes("-") && argument.includes(".txt")) {
+			fileName = argument;
+		}
+		return;
+	});
+}
+
 // check if command was provided
-if (!command) {
-	console.log(
-		`\x1b[1mCommand not found. Either you didn't provide a command or you provided a wrong command. 
+function checkIfArgumentsAreValid(command, fileName) {
+	if (!command) {
+		console.log(
+			`\x1b[1mCommand not found. Either you didn't provide a command or you provided a wrong command. 
 Second argument must be a command option!
 Aviable commands:\x1b[0m 
 -c - count bytes, 
@@ -30,14 +35,17 @@ Aviable commands:\x1b[0m
 -w - outputs number of words
 -m - outputs number of characters
 `
-	);
+		);
+	}
+	if (!fileName) {
+		console.log(
+			"\x1b[1mFile name is not valid. You might be missing . notation\x1b[0m"
+		);
+		process.exit();
+	}
 }
-if (!fileName) {
-	console.log(
-		"\x1b[1mFile name is not valid. You might be missing . notation\x1b[0m"
-	);
-	process.exit();
-}
+defineVariablesFromArguments(processArguments);
+checkIfArgumentsAreValid(command, fileName);
 const fileContent = fileName && fs.readFileSync(fileName, "utf-8");
 
 // create file content constant
