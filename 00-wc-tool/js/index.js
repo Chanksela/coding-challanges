@@ -1,26 +1,46 @@
-// const fs = require("fs");
 import fs from "fs";
-const commands = ["-c", "-w", "-l", "-m"];
-console.log(process.argv[2]);
-// read and assign the command name
-const command = process.argv[2];
-// read adn assign the file name
-const fileName = process.argv[3];
+// commands array
+const commands = ["-c", "-l", "-w", "-m"];
+// create process arguments array
+let processArguments = process.argv;
+// remove first two arguments from processArguments, it is not needeed
+processArguments.splice(0, 2);
+// create filenam variable
+let fileName;
+// create command variable
+let command;
+// check if command exists in processArguments
+processArguments.filter((argument) => {
+	if (commands.includes(argument)) {
+		command = argument;
+	}
+	if (!argument.includes("-") && argument.includes(".txt")) {
+		fileName = argument;
+	}
+	return;
+});
 // check if command was provided
-if (!commands.includes(command)) {
+if (!command) {
 	console.log(
-		`\x1b[1mCommand not found. 
-Second argument must be a command option!\x1b[0m
-Aviable commands: 
+		`\x1b[1mCommand not found. Either you didn't provide a command or you provided a wrong command. 
+Second argument must be a command option!
+Aviable commands:\x1b[0m 
 -c - count bytes, 
 -l - outputs number of lines,
 -w - outputs number of words
--m - outputs number of characters`
+-m - outputs number of characters
+`
+	);
+}
+if (!fileName) {
+	console.log(
+		"\x1b[1mFile name is not valid. You might be missing . notation\x1b[0m"
 	);
 	process.exit();
 }
+const fileContent = fileName && fs.readFileSync(fileName, "utf-8");
+
 // create file content constant
-const fileContent = fs.readFileSync(fileName, "utf-8");
 if (command === "-c") {
 	// create a function that count byteLength of the file
 	const byteLength = Buffer.byteLength(fileContent);
