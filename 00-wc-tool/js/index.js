@@ -8,6 +8,12 @@ let fileName;
 let command;
 let fileContent;
 
+// create variables for command results
+let byteLength;
+let lines;
+let words;
+let characters;
+
 // create a function that defines variables from arguments
 function defineVariablesFromArguments(processArguments) {
 	// remove first two arguments from processArguments, it is not needeed
@@ -25,40 +31,49 @@ function defineVariablesFromArguments(processArguments) {
 		return;
 	});
 }
-// create a function that provide command results
-function commandResults(command, fileContent, processArguments) {
-	// command -c
-	const byteLength = Buffer.byteLength(fileContent);
-	// command -l
-	let lines = fileContent.split("\n");
+function getByteLength(fileContent) {
+	return Buffer.byteLength(fileContent);
+}
+function getLines(fileContent) {
+	lines = fileContent.split("\n");
 	// check if there is no new line at the end of the file
 	if (lines[lines.length - 1] === "") {
 		lines = lines.length - 1;
 	} else {
 		lines = lines.length;
 	}
-	// command -w
+	return lines;
+}
+function getWords(fileContent) {
 	// create words array
-	const words = fileContent.split(/\s+/);
+	let filteredWords = fileContent.split(/\s+/);
 
 	// filter empty stringss
-	const filteredWords = words.filter((word) => word !== "");
-
-	// command -m
-
+	words = filteredWords.filter((word) => word !== "");
+	return words;
+}
+function getCharacters(fileContent) {
 	// create characters array
-	let characters = fileContent.split("");
+	let filteredCharacters = fileContent.split("");
 	// filter out empty characters
-	const filteredCharacters = characters.filter(
+	characters = filteredCharacters.filter(
 		(character) => character !== "" || character !== " "
 	);
+	return characters;
+}
+// create a function that provide command results
+function commandResults(command, fileContent, processArguments) {
+	// command -c
+	byteLength = getByteLength(fileContent);
+	// command -l
+	lines = getLines(fileContent);
+	// command -w
+	words = getWords(fileContent);
+	// command -m
+	characters = getCharacters(fileContent);
+
 	if (fileContent && processArguments[0] === fileName) {
-		console.log(
-			Buffer.byteLength(fileContent),
-			lines,
-			filteredWords.length,
-			fileName
-		);
+		console.log(byteLength, lines, words.length, fileName);
 	} else {
 		switch (command) {
 			case "-c":
@@ -68,10 +83,10 @@ function commandResults(command, fileContent, processArguments) {
 				console.log(lines);
 				break;
 			case "-w":
-				console.log(filteredWords.length);
+				console.log(words.length);
 				break;
 			case "-m":
-				console.log(filteredCharacters.length);
+				console.log(characters.length);
 				break;
 		}
 	}
