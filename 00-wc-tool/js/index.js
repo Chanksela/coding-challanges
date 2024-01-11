@@ -24,21 +24,21 @@ function defineVariablesFromArguments(argument) {
 }
 // check if command was provided
 function checkIfArgumentsAreValid(command, fileName) {
-	if (command === undefined && processArguments.length > 3) {
-		console.log(
-			`\x1b[1mCommand not found. Either you didn't provide a command or you provided a wrong command. 
-			Second argument must be a command option!
-			Aviable commands:\x1b[0m 
-				-c - count bytes, 
-				-l - outputs number of lines,
-				-w - outputs number of words
--m - outputs number of characters
-`
-		);
+	if (command === undefined && processArguments[2] !== fileName) {
+		console.log(`
+\x1b[1;31mCommand not found. Either you didn't provide a command or you provided a wrong command. 
+
+\x1b[32mAviable commands:
+	\x1b[0m
+    \x1b[1m-c - count bytes,\x1b[0m
+    \x1b[1m-l - outputs number of lines,\x1b[0m
+    \x1b[1m-w - outputs number of words\x1b[0m
+    \x1b[1m-m - outputs number of characters\x1b[0m
+`);
 	}
 	if (!fileName) {
 		console.log(
-			"\x1b[1mFile name is not valid. You might be missing . notation\x1b[0m"
+			"\x1b[1;31mFile name is not valid. You might be missing dot snotation\x1b[0m"
 		);
 		process.exit();
 	}
