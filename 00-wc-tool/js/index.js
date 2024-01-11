@@ -3,11 +3,11 @@ import fs from "fs";
 const commands = ["-c", "-l", "-w", "-m"];
 let processArguments = process.argv;
 
-// create variable for file name and command
+// create variable for command, file name and file content
 let fileName;
 let command;
-
-function defineVariablesFromArguments(argument) {
+let fileContent;
+function defineVariablesFromArguments(processArguments) {
 	// remove first two arguments from processArguments, it is not needeed
 	processArguments.splice(0, 2);
 
@@ -18,13 +18,18 @@ function defineVariablesFromArguments(argument) {
 		}
 		if (!argument.includes("-") && argument.includes(".txt")) {
 			fileName = argument;
+			fileContent = fs.readFileSync(fileName, "utf8");
 		}
 		return;
 	});
 }
 // check if command was provided
 function checkIfArgumentsAreValid(command, fileName) {
-	if (command === undefined && processArguments[2] !== fileName) {
+	console.log(process.argv);
+	if (
+		!commands.includes(processArguments[0]) &&
+		processArguments.length === 2
+	) {
 		console.log(`
 \x1b[1;31mCommand not found. Either you didn't provide a command or you provided a wrong command. 
 
@@ -45,7 +50,6 @@ function checkIfArgumentsAreValid(command, fileName) {
 }
 defineVariablesFromArguments(processArguments);
 checkIfArgumentsAreValid(command, fileName);
-const fileContent = fileName && fs.readFileSync(fileName, "utf-8");
 
 // check if in there is no argument and console default option data
 if (fileContent && processArguments[0] === fileName) {
