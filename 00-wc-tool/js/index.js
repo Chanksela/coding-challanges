@@ -7,6 +7,8 @@ let processArguments = process.argv;
 let fileName;
 let command;
 let fileContent;
+
+// create a function that defines variables from arguments
 function defineVariablesFromArguments(processArguments) {
 	// remove first two arguments from processArguments, it is not needeed
 	processArguments.splice(0, 2);
@@ -23,9 +25,59 @@ function defineVariablesFromArguments(processArguments) {
 		return;
 	});
 }
+// create a function that provide command results
+function commandResults(command, fileContent, processArguments) {
+	// command -c
+	const byteLength = Buffer.byteLength(fileContent);
+	// command -l
+	let lines = fileContent.split("\n");
+	// check if there is no new line at the end of the file
+	if (lines[lines.length - 1] === "") {
+		lines = lines.length - 1;
+	} else {
+		lines = lines.length;
+	}
+	// command -w
+	// create words array
+	const words = fileContent.split(/\s+/);
+
+	// filter empty stringss
+	const filteredWords = words.filter((word) => word !== "");
+
+	// command -m
+
+	// create characters array
+	let characters = fileContent.split("");
+	// filter out empty characters
+	const filteredCharacters = characters.filter(
+		(character) => character !== "" || character !== " "
+	);
+	if (fileContent && processArguments[0] === fileName) {
+		console.log(
+			Buffer.byteLength(fileContent),
+			lines,
+			filteredWords.length,
+			fileName
+		);
+	} else {
+		switch (command) {
+			case "-c":
+				console.log(byteLength);
+				break;
+			case "-l":
+				console.log(lines);
+				break;
+			case "-w":
+				console.log(filteredWords.length);
+				break;
+			case "-m":
+				console.log(filteredCharacters.length);
+				break;
+		}
+	}
+}
 // check if command was provided
 function checkIfArgumentsAreValid(command, fileName) {
-	console.log(process.argv);
 	if (
 		!commands.includes(processArguments[0]) &&
 		processArguments.length === 2
@@ -48,67 +100,8 @@ function checkIfArgumentsAreValid(command, fileName) {
 		process.exit();
 	}
 }
+
+// execute functions
 defineVariablesFromArguments(processArguments);
 checkIfArgumentsAreValid(command, fileName);
-
-// check if in there is no argument and console default option data
-if (fileContent && processArguments[0] === fileName) {
-	let lines = fileContent.split("\n");
-	// check if there is no new line at the end of the file
-	if (lines[lines.length - 1] === "") {
-		lines = lines.length - 1;
-	} else {
-		lines = lines.length;
-	}
-	let words = fileContent.split(/\s+/);
-
-	// filter empty stringss
-	const filteredWords = words.filter((word) => word !== "");
-	console.log(
-		Buffer.byteLength(fileContent),
-		lines,
-		filteredWords.length,
-		fileName
-	);
-}
-
-// create file content constant
-if (command === "-c") {
-	// create a function that count byteLength of the file
-	const byteLength = Buffer.byteLength(fileContent);
-
-	// console bytes length
-	console.log(byteLength);
-}
-// create a function for commanw -l
-else if (command === "-l") {
-	// split text by new line
-	let lines = fileContent.split("\n");
-	// check if there is no new line at the end of the file
-	if (lines[lines.length - 1] === "") {
-		lines = lines.length - 1;
-	} else {
-		lines = lines.length;
-	}
-	// console lines
-	console.log(lines);
-} else if (command === "-w") {
-	// create words array
-	let words = fileContent.split(/\s+/);
-
-	// filter empty stringss
-	const filteredWords = words.filter((word) => word !== "");
-
-	// console words
-	console.log(filteredWords.length);
-} else if (command === "-m") {
-	// create characters array
-	let characters = fileContent.split("");
-
-	// filter out empty characters
-	const filteredWords = characters.filter(
-		(character) => character !== "" || character !== " "
-	);
-
-	console.log(filteredWords.length);
-}
+commandResults(command, fileContent, processArguments);
