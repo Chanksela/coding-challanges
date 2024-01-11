@@ -22,17 +22,16 @@ function defineVariablesFromArguments(argument) {
 		return;
 	});
 }
-
 // check if command was provided
 function checkIfArgumentsAreValid(command, fileName) {
-	if (!command) {
+	if (command === undefined && processArguments.length > 3) {
 		console.log(
 			`\x1b[1mCommand not found. Either you didn't provide a command or you provided a wrong command. 
-Second argument must be a command option!
-Aviable commands:\x1b[0m 
--c - count bytes, 
--l - outputs number of lines,
--w - outputs number of words
+			Second argument must be a command option!
+			Aviable commands:\x1b[0m 
+				-c - count bytes, 
+				-l - outputs number of lines,
+				-w - outputs number of words
 -m - outputs number of characters
 `
 		);
@@ -47,6 +46,27 @@ Aviable commands:\x1b[0m
 defineVariablesFromArguments(processArguments);
 checkIfArgumentsAreValid(command, fileName);
 const fileContent = fileName && fs.readFileSync(fileName, "utf-8");
+
+// check if in there is no argument and console default option data
+if (fileContent && processArguments[0] === fileName) {
+	let lines = fileContent.split("\n");
+	// check if there is no new line at the end of the file
+	if (lines[lines.length - 1] === "") {
+		lines = lines.length - 1;
+	} else {
+		lines = lines.length;
+	}
+	let words = fileContent.split(/\s+/);
+
+	// filter empty stringss
+	const filteredWords = words.filter((word) => word !== "");
+	console.log(
+		Buffer.byteLength(fileContent),
+		lines,
+		filteredWords.length,
+		fileName
+	);
+}
 
 // create file content constant
 if (command === "-c") {
