@@ -1,5 +1,5 @@
 import fs from "fs";
-// import { defineVariablesFromArguments } from "./functions.js";
+
 // Create arrays for commands and process arguments
 const commands = ["-c", "-l", "-w", "-m"];
 let processArguments = process.argv;
@@ -8,7 +8,7 @@ let processArguments = process.argv;
 let fileName;
 let command;
 let fileContent;
-
+// let standartInput = fs.readFileSync(0, "utf8");
 // create variables for command results
 let byteLength;
 let lines;
@@ -19,9 +19,7 @@ let characters;
 function defineVariablesFromArguments(processArguments) {
 	// remove first two arguments from processArguments, it is not needeed
 	processArguments.splice(0, 2);
-
-	// check if command exists in processArguments
-	processArguments.filter((argument) => {
+	processArguments.map((argument) => {
 		if (commands.includes(argument)) {
 			command = argument;
 		}
@@ -29,7 +27,6 @@ function defineVariablesFromArguments(processArguments) {
 			fileName = argument;
 			fileContent = fs.readFileSync(fileName, "utf8");
 		}
-		return;
 	});
 }
 function getByteLength(fileContent) {
@@ -73,8 +70,13 @@ function commandResults(command, fileContent, processArguments) {
 	// command -m
 	characters = getCharacters(fileContent);
 
-	if (fileContent && processArguments[0] === fileName) {
-		console.log(byteLength, lines, words.length, fileName);
+	if (fileContent && processArguments[0] === fileName && !command) {
+		console.log(
+			byteLength,
+			lines,
+			words.length,
+			fileName ? fileName : "standart input"
+		);
 	} else {
 		switch (command) {
 			case "-c":
@@ -93,7 +95,7 @@ function commandResults(command, fileContent, processArguments) {
 	}
 }
 // check if command was provided
-function checkIfArgumentsAreValid(command, fileName) {
+function checkIfArgumentsAreValid(command, fileName, processArguments) {
 	if (
 		!commands.includes(processArguments[0]) &&
 		processArguments.length === 2
@@ -110,13 +112,14 @@ function checkIfArgumentsAreValid(command, fileName) {
 `);
 	}
 	if (!fileName) {
-		console.log(
-			"\x1b[1;31mFile name is not valid. You might be missing dot snotation\x1b[0m"
-		);
+		process.argv.length > 1
+			? console.log(
+					"\x1b[1;31mFile name is not valid. You might be missing dot notation\x1b[0m"
+			  )
+			: commandResults(command, fs.readFileSync(0, "utf-8"), processArguments);
 		process.exit();
 	}
 }
-
 // execute functions
 defineVariablesFromArguments(
 	processArguments,
@@ -125,5 +128,5 @@ defineVariablesFromArguments(
 	fileName,
 	fileContent
 );
-checkIfArgumentsAreValid(command, fileName);
+checkIfArgumentsAreValid(command, fileName, processArguments);
 commandResults(command, fileContent, processArguments);
