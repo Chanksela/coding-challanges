@@ -1,4 +1,5 @@
 import fs from "fs";
+// import { defineVariablesFromArguments } from "./functions.js";
 // Create arrays for commands and process arguments
 const commands = ["-c", "-l", "-w", "-m"];
 let processArguments = process.argv;
@@ -117,6 +118,12 @@ function checkIfArgumentsAreValid(command, fileName) {
 }
 
 // execute functions
-defineVariablesFromArguments(processArguments);
+defineVariablesFromArguments(
+	processArguments,
+	commands,
+	command,
+	fileName,
+	fileContent
+);
 checkIfArgumentsAreValid(command, fileName);
 commandResults(command, fileContent, processArguments);
