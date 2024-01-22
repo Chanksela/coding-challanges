@@ -1,6 +1,6 @@
 import fs from "fs";
 // Create arrays for commands and process arguments
-const commands = ["-c", "-l", "-w", "-m"];
+let commands = ["-c", "-l", "-w", "-m"];
 let processArguments = process.argv;
 
 // create variable for command, file name and file content
@@ -13,7 +13,6 @@ let byteLength;
 let lines;
 let words;
 let characters;
-
 // create a function that defines variables from arguments
 function defineVariablesFromArguments(processArguments) {
 	// remove first two arguments from processArguments, it is not needeed
