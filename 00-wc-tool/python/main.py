@@ -89,5 +89,3 @@ else:
         print(countBytes(), countLines(), countWords(), args.file if args.file else "")
     else:
         print("Can't do it for now")
-
-print(sys.stdin.read())
